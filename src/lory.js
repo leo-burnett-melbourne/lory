@@ -132,6 +132,12 @@ export function lory (slider, opts) {
 
         const nextSlide = direction ? index + 1 : index - 1;
         const maxOffset = Math.round(slidesWidth - frameWidth);
+        /**
+         * maxOffset doesn't work when slides less than 100% width of frame
+         * adding maxOffsetFixedWidth to fix this
+         * https://github.com/meandmax/lory/issues/670
+         */
+        const maxOffsetFixedWidth = Math.round(slidesWidth - (slidesWidth / slides.length));
 
         dispatchSliderEvent('before', 'slide', {
             index,
@@ -174,7 +180,7 @@ export function lory (slider, opts) {
          * update the index with the nextIndex only if
          * the offset of the nextIndex is in the range of the maxOffset
          */
-        if (slides[nextIndex].offsetLeft <= maxOffset) {
+        if (slides[nextIndex].offsetLeft <= maxOffsetFixedWidth) {
             index = nextIndex;
         }
 
